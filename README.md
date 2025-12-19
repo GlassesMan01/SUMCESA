@@ -55,7 +55,6 @@ This project was developed to gain experience in:
 ### 4️⃣ Multi-Platform Support
 
 - **Windows**: WMI / PowerShell automation
-- **Linux**: apt / dnf package managers
 - Centralized control through web interface
 
 ### 5️⃣ Automated Reporting
@@ -140,6 +139,7 @@ _System configuration and management options_
 
 - NVD API (CVE & CVSS data)
 - Custom REST API for agent communication
+- Groq Llama API for report generation
 
 ---
 
@@ -243,4 +243,3 @@ Building SUMCESA was an intensive hands-on learning experience (~200+ hours) tha
 - Handle real-world data accuracy and performance issues
 - Build user-friendly interfaces for technical audiences
 - SUMCESA represents my growth across cybersecurity, automation, and software engineering.
-````
