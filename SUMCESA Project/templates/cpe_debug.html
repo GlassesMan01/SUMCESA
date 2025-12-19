@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Vulnerability Analysis for {{ software.name }}</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5><i class="bi bi-info-circle"></i> CPE Information</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Official CPE:</dt>
+                <dd class="col-sm-9 text-monospace">{{ official_cpe or 'Not found' }}</dd>
+                
+                <dt class="col-sm-3">Generated CPE:</dt>
+                <dd class="col-sm-9 text-monospace">{{ generated_cpe }}</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-{% if cves %}warning{% else %}success{% endif %} text-white">
+            <h5>
+                <i class="bi bi-shield-exclamation"></i> 
+                Vulnerabilities Found (Total: {{ cves|length }})
+            </h5>
+        </div>
+        <div class="card-body">
+            {% if cves %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>CVE ID</th>
+                            <th>Severity</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cve in cves %}
+                        <tr class="table-{{ 'danger' if cve.severity == 'CRITICAL' else 'warning' if cve.severity == 'HIGH' else 'info' }}">
+                            <td>
+                                <a href="https://nvd.nist.gov/vuln/detail/{{ cve.cve_id }}" target="_blank">
+                                    {{ cve.cve_id }}
+                                </a>
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ 'danger' if cve.severity == 'CRITICAL' else 'warning' if cve.severity == 'HIGH' else 'info' }}">
+                                    {{ cve.severity }}
+                                </span>
+                            </td>
+                            <td>{{ cve.description }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-success">
+                <i class="bi bi-check-circle"></i> 
+                No vulnerabilities found for this software version
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h5><i class="bi bi-bar-chart"></i> Detection Sources</h5>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Official CPE Matches: {{ cve_sources.official_cpe }}
+                </li>
+                <li class="list-group-item">
+                    Generated CPE Matches: {{ cve_sources.generated_cpe }}
+                </li>
+                <li class="list-group-item">
+                    Keyword Matches: {{ cve_sources.keyword }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

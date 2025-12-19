@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Error{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Error</h1>
+</div>
+
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading"><i class="bi bi-exclamation-octagon"></i> An error occurred</h4>
+    <p>{{ error_message }}</p>
+    <hr>
+    <p class="mb-0">Please try again or contact support if the problem persists.</p>
+</div>
+
+<div class="d-grid gap-2">
+    <button class="btn btn-primary" onclick="window.history.back()">
+        <i class="bi bi-arrow-left"></i> Go Back
+    </button>
+</div>
+{% endblock %}

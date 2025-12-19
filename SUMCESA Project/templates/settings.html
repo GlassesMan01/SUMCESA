@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Settings</h1>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <i class="bi bi-gear"></i> Application Settings
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('settings') }}">
+            <div class="mb-3">
+                <label for="inventory_interval" class="form-label">Inventory Update Interval (minutes)</label>
+                <input type="number" class="form-control" id="inventory_interval" name="inventory_interval" 
+                       value="{{ current_interval }}" min="1" required>
+                <div class="form-text">How often to automatically check for software updates</div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Save Settings
+            </button>
+            <!-- Add to your settings form -->
+        </form>
+    </div>
+</div>
+{% endblock %}

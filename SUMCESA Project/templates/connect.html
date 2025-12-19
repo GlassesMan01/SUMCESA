@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}Connect Machines{% endblock %}
+
+{% block content %}
+<style>
+    .card-header {
+        background-color: #f8f9fa;
+        font-weight: 500;
+        border-bottom: 1px solid #dee2e6;
+    }
+    .card {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .btn-clipboard-success {
+        background-color: #198754;
+        border-color: #198754;
+        color: #fff;
+    }
+    .code-block {
+        background-color: #2d2d2d;
+        color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.25rem;
+        font-family: Consolas, monospace;
+        overflow-x: auto;
+    }
+</style>
+
+<div class="container my-4">
+        <div class="d-flex justify-content-between align-items-center">
+                <h1 class="mb-0">Connect Machines to SUMCESA</h1>
+                <a href="{{ url_for('download_agent_bat') }}" class="btn btn-success">
+                        <i class="bi bi-windows"></i> Download Windows Agent (.bat)
+                </a>
+        </div>
+        <hr>
+
+        <div class="row g-4">
+                <!-- Server Information -->
+                <div class="col-md-6">
+                        <div class="card">
+                                <div class="card-header">
+                                        <i class="bi bi-server"></i> Server Information
+                                </div>
+                                <div class="card-body">
+                                        <div class="mb-3">
+                                                <label class="form-label fw-bold">Server URL:</label>
+                                                <div class="input-group">
+                                                        <input type="text" class="form-control" value="{{ server_url }}" readonly>
+                                                        <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('{{ server_url }}')">
+                                                                <i class="bi bi-clipboard"></i>
+                                                        </button>
+                                                </div>
+                                        </div>
+                                        <div class="mb-3">
+                                                <label class="form-label fw-bold">Server IP:</label>
+                                                <div class="input-group">
+                                                        <input type="text" class="form-control" value="{{ server_ip }}" readonly>
+                                                        <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('{{ server_ip }}')">
+                                                                <i class="bi bi-clipboard"></i>
+                                                        </button>
+                                                </div>
+                                        </div>
+                                        <div class="mb-3">
+                                                <label class="form-label fw-bold">Port:</label>
+                                                <input type="text" class="form-control" value="{{ server_port }}" readonly>
+                                        </div>
+                                        {% if server_ip == 'YOUR_SERVER_IP' %}
+                                        <div class="alert alert-warning mt-3">
+                                                <i class="bi bi-exclamation-triangle"></i>
+                                                <strong>Note:</strong> Replace 'YOUR_SERVER_IP' with your actual server IP address when sharing with clients.
+                                        </div>
+                                        {% endif %}
+                                </div>
+                        </div>
+                </div>
+
+                <!-- Quick Start Guide (Windows) -->
+                <div class="col-md-6">
+                        <div class="card">
+                                <div class="card-header">
+                                        <i class="bi bi-lightning"></i> Quick Start
+                                </div>
+                                <div class="card-body">
+                                        <p class="mb-2">For Windows users, follow these steps:</p>
+                                        <ol>
+                                                <li>Download the Windows Agent (.bat) from the button above.</li>
+                                                <li>Double-click <code>sumcesa_agent.bat</code> to run.</li>
+                                                <li>Visit the <a href="{{ url_for('list_machines') }}">Machines</a> page to view your connection.</li>
+                                        </ol>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Manual Connection Guide -->
+        <div class="row mt-4">
+                <div class="col-12">
+                        <div class="card">
+                                <div class="card-header">
+                                        <i class="bi bi-code-slash"></i> Manual Connection Guide
+                                </div>
+                                <div class="card-body">
+                                        <!-- Step 1 -->
+                                        <h5>Step 1: Register Machine</h5>
+                                        <p>Register your machine with the server:</p>
+                                        <div class="mb-4">
+                                                <h6>Windows CMD:</h6>
+                                                <pre class="code-block">
+curl -X POST "{{ server_url }}/api/register" -H "Content-Type: application/json" -d "{ &quot;machine_id&quot;: &quot;your-machine-name&quot;, &quot;hostname&quot;: &quot;your-hostname&quot;, &quot;os&quot;: &quot;Windows 11&quot; }"
+                                                </pre>
+                                        </div>
+                                        <div class="mb-4">
+                                                <h6>Windows PowerShell:</h6>
+                                                <pre class="code-block">
+curl -Method POST "{{ server_url }}/api/register" -H "Content-Type: application/json" -Body '{ "machine_id": "your-machine-name", "hostname": "your-hostname", "os": "Windows 11" }'
+                                                </pre>
+                                        </div>
+                                        <!-- Step 2 -->
+                                        <h5>Step 2: Report Software Inventory</h5>
+                                        <p>Report your installed software:</p>
+                                        <div class="mb-4">
+                                                <h6>Windows CMD:</h6>
+                                                <pre class="code-block">
+curl -X POST "{{ server_url }}/api/report" -H "Content-Type: application/json" -d "{ &quot;machine_id&quot;: &quot;your-machine-name&quot;, &quot;software&quot;: [ { &quot;name&quot;: &quot;Google Chrome&quot;, &quot;version&quot;: &quot;126.0.0&quot;, &quot;source&quot;: &quot;winget&quot; }, { &quot;name&quot;: &quot;VLC media player&quot;, &quot;version&quot;: &quot;3.0.20&quot;, &quot;source&quot;: &quot;winget&quot; } ] }"
+                                                </pre>
+                                        </div>
+                                        <div class="mb-4">
+                                                <h6>Windows PowerShell:</h6>
+                                                <pre class="code-block">
+curl -Method POST "{{ server_url }}/api/report" -H "Content-Type: application/json" -Body '{ "machine_id": "your-machine-name", "software": [ { "name": "Google Chrome", "version": "126.0.0", "source": "winget" }, { "name": "VLC media player", "version": "3.0.20", "source": "winget" } ] }'
+                                                </pre>
+                                        </div>
+                                        <!-- Step 3 -->
+                                        <h5>Step 3: Automated Reporting</h5>
+                                        <p>Set up a scheduled task to run the agent script daily:</p>
+                                        <pre class="code-block mb-0">
+schtasks /create /tn "SUMCESA Agent" /tr "python C:\path\to\sumcesa_agent.py" /sc daily /st 09:00
+                                        </pre>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Requirements -->
+        <div class="row mt-4">
+                <div class="col-12">
+                        <div class="card">
+                                <div class="card-header">
+                                        <i class="bi bi-list-check"></i> Requirements
+                                </div>
+                                <div class="card-body">
+                                        <div class="row">
+                                                <div class="col-md-6">
+                                                        <h6>General:</h6>
+                                                        <ul>
+                                                                <li>Windows 10/11 with winget installed</li>
+                                                                <li>Internet connection to reach the server</li>
+                                                        </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                        <h6>Additional:</h6>
+                                                        <ul>
+                                                                <li>Task Scheduler permissions for automated reporting</li>
+                                                        </ul>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Troubleshooting -->
+        <div class="row mt-4">
+                <div class="col-12">
+                        <div class="card">
+                                <div class="card-header">
+                                        <i class="bi bi-tools"></i> Troubleshooting
+                                </div>
+                                <div class="card-body">
+                                        <div class="accordion" id="troubleshootingAccordion">
+                                                <div class="accordion-item">
+                                                        <h2 class="accordion-header" id="headingOne">
+                                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                                                        Connection Refused
+                                                                </button>
+                                                        </h2>
+                                                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                                                                <div class="accordion-body">
+                                                                        <ul>
+                                                                                <li>Check if the server is running.</li>
+                                                                                <li>Verify the server IP and port.</li>
+                                                                                <li>Ensure firewall settings allow connections on port {{ server_port }}.</li>
+                                                                                <li>Try pinging the server: <code>ping {{ server_ip }}</code></li>
+                                                                        </ul>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                        <h2 class="accordion-header" id="headingTwo">
+                                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                                                        No Software Found
+                                                                </button>
+                                                        </h2>
+                                                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                                                                <div class="accordion-body">
+                                                                        <ul>
+                                                                                <li>Ensure winget is installed (<code>winget --version</code>).</li>
+                                                                                <li>Run the agent as an administrator.</li>
+                                                                                <li>Verify installed software availability via winget.</li>
+                                                                        </ul>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+</div>
+
+<script>
+function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+                const button = event.target.closest('button');
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="bi bi-check"></i>';
+                button.classList.remove('btn-outline-secondary');
+                button.classList.add('btn-clipboard-success');
+                
+                setTimeout(function() {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('btn-clipboard-success');
+                        button.classList.add('btn-outline-secondary');
+                }, 1000);
+        }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+        });
+}
+</script>
+{% endblock %}
