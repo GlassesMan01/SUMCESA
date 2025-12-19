@@ -4,7 +4,7 @@
 
 SUMCESA is a lightweight, automated tool for managing software updates, tracking installed software, and assessing vulnerabilities using CVE/NVD data. It provides a centralized web dashboard to visualize security posture, monitor updates, and generate automated compliance reports.
 
-This project was developed as a hands-on learning initiative to gain practical experience in cybersecurity automation, cross-platform system administration, and full-stack development.**.
+This project was developed as a hands-on learning initiative to gain practical experience in cybersecurity automation, cross-platform system administration, and full-stack development.
 
 ---
 
