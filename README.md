@@ -1,9 +1,10 @@
 # SUMCESA 🔐
 
-**Security Update Management & CVE Self-Assessment Tool**
+**Security Update Management Tool for Cyber Essentials Self Assessment (SUMCESA)**
 
-SUMCESA is a lightweight, automated security update and vulnerability management tool designed to help track installed software, identify known vulnerabilities, and visualize security posture across multiple systems.  
-This project was built as a **hands-on learning initiative in cybersecurity automation, system administration, and full-stack development**.
+SUMCESA is a lightweight, automated tool for managing software updates, tracking installed software, and assessing vulnerabilities using CVE/NVD data. It provides a centralized web dashboard to visualize security posture, monitor updates, and generate automated compliance reports.
+
+This project was developed as a hands-on learning initiative to gain practical experience in cybersecurity automation, cross-platform system administration, and full-stack development.**.
 
 ---
 
